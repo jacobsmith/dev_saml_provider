@@ -1,4 +1,4 @@
-== README
+## README
 
 This is a *super* basic Rails app designed to be used to test SAML clients.
 
@@ -9,7 +9,7 @@ https://github.com/lawrencepit/ruby-saml-idp
 
 And largely (though not completely) follows the guide outlined here: https://github.com/sportngin/saml_idp/wiki
 
-== Intended Use Case
+## Intended Use Case
 
 This app is designed to be downloaded and run locally. Running:
 
@@ -27,7 +27,7 @@ rails server -p 3001
 
 etc.
 
-== Configuration
+## Configuration
 
 By default, setting up a SAML client to point to: `http://localhost:3000/saml/auth` should initiate the flow.
 
@@ -56,6 +56,6 @@ At the login page, you can enter any email address, and it will be "valid" if th
 The name that is returned is the local part of the email with `+`, `_`, and `.` replaced with spaces.
 The `user_id_attribute` is a MD5 digest of the email address, so each login with the *same* email address should return the same ID, mimicing multiple persisted users.
 
-== Security
+## Security
 
 There is none. This is the opposite of secure. It uses default security certificates shipped with the `saml_idp` gem, which are publicly available on GitHub. Furthermore, this has 0 testing around it, nor do I have much knowledge in terms of supporting SAML IdP in a production setting. This is *only* meant to be a simple, easy to setup endpoint that echoes back some SAML for testing clients. You have been warned.
