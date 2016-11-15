@@ -14,8 +14,8 @@ And largely (though not completely) follows the guide outlined here: https://git
 This app is designed to be downloaded and run locally. Running:
 
 ```bash
-git clone git://github.com/jacobsmith/dev_saml_provider
-cd super_simple_saml_provider
+git clone git@github.com:jacobsmith/dev_saml_provider.git
+cd dev_saml_provider
 rails server -p 3000
 ```
 
