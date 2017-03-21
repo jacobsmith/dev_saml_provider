@@ -1,25 +1,26 @@
 class User
-  attr_reader :email, :password
-  def initialize(email:, password:)
+  attr_reader :email, :password, :params
+  def initialize(email:, password:, params:)
     @email = email
-    @password = password 
+    @password = password
+    @params = params
   end
 
   # I think this is akin to an "id"
-  def persistent 
+  def persistent
     123
   end
 
   def valid_password?
     password == "password"
   end
-  
+
   def name
     email.split("@").first.gsub(/(\+|_|\.)/, " ")
   end
 
   def id
-    Digest::MD5.hexdigest(email)
+    params[:user_id].presence || Digest::MD5.hexdigest(email)
   end
 
   def asserted_attributes
@@ -33,28 +34,82 @@ class User
       },
       user_id_attribute: {
         getter: :id,
-        name: "urn:oid:1.3.6.1.4.1.5923.1.1.1.10" 
+        name: "urn:oid:1.3.6.1.4.1.5923.1.1.1.10"
       }
     }
   end
 end
 
 
-class SamlIdpController < SamlIdp::IdpController
+## Parent class!
+module SamlIdp
+  class IdpController < ActionController::Base
+    include SamlIdp::Controller
 
-  def idp_authenticate(email, password) # not using params intentionally
-    user = User.new(email: email, password: password)
+    unloadable unless Rails::VERSION::MAJOR >= 4
+    protect_from_forgery
+    before_filter :validate_saml_request, only: [:new, :create]
+
+    def new
+      render template: "saml_idp/idp/new"
+    end
+
+    def show
+      render xml: SamlIdp.metadata.signed
+    end
+
+    def create
+      unless params[:email].blank? && params[:password].blank?
+        person = idp_authenticate(params[:email], params[:password], params)
+        if person.nil?
+          @saml_idp_fail_msg = "Incorrect email or password."
+        else
+          @saml_response = idp_make_saml_response(person)
+          render :template => "saml_idp/idp/saml_post", :layout => false
+          return
+        end
+      end
+      render :template => "saml_idp/idp/new"
+    end
+
+    def logout
+      idp_logout
+      @saml_response = idp_make_saml_response(nil)
+      render :template => "saml_idp/idp/saml_post", :layout => false
+    end
+
+    def idp_logout
+      raise NotImplementedError
+    end
+    private :idp_logout
+
+    def idp_authenticate(email, password)
+      raise NotImplementedError
+    end
+    protected :idp_authenticate
+
+    def idp_make_saml_response(person)
+      raise NotImplementedError
+    end
+    protected :idp_make_saml_response
+  end
+end
+
+
+
+class SamlIdpController < SamlIdp::IdpController
+  def new
+    render "new"
+  end
+
+  def idp_authenticate(email, password, params) # not using params intentionally
+    user = User.new(email: email, password: password, params: params)
     user && user.valid_password? ? user : nil
   end
   private :idp_authenticate
 
   def idp_make_saml_response(found_user) # not using params intentionally
-    # NOTE encryption is optional
-    encode_response found_user#, encryption: {
-#      cert: saml_request.service_provider.cert,
-#      block_encryption: 'aes256-cbc',
-#      key_transport: 'rsa-oaep-mgf1p'
-#    }
+    encode_response(found_user)
   end
   private :idp_make_saml_response
 
