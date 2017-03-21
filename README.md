@@ -29,6 +29,17 @@ etc.
 
 ## Configuration
 
+For convenience, there is a hosted version of this available at `https://supersimplesamlidp.herokuapp.com`
+
+SAML requests will need to be sent to: `https://supersimplesamlidp.herokuapp.com/saml/auth`
+The certificate fingerprint is: `9E:65:2E:03:06:8D:80:F2:86:C7:6C:77:A1:D9:14:97:0A:4D:F4:4D`
+
+Obivously this is *SUPER INSECURE* so please only use it for dev or testing environments where you're not worried if data integrity is compromised. As soon as you need real authentication, do not use this, this is just for quick setup and testing of SAML configurations.
+
+==
+Locally
+==
+
 By default, setting up a SAML client to point to: `http://localhost:3000/saml/auth` should initiate the flow.
 
 Currently, the SAML responses are as follows:
