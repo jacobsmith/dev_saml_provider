@@ -4,6 +4,9 @@ Rails.application.routes.draw do
   get '/saml/metadata' => 'saml_idp#show'
   post '/saml/auth' => 'saml_idp#create'
   match '/saml/logout' => 'saml_idp#logout', via: [:get, :post, :delete]
+  get '/me' => 'oauth_users#me'
+
+  use_doorkeeper
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
