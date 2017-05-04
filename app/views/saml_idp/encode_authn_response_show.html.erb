@@ -1,0 +1,38 @@
+<h1>IdP Initiated</h1>
+
+<p>This is to simulate an issuer sending a Response to your SAML endpoint without receiving a corresponding Request first.</p>
+
+
+<%= form_tag do %>
+  <p>
+    <%= label_tag :email %>
+    <%= email_field_tag :email, params[:email], :autocapitalize => "off", :autocorrect => "off", :autofocus => "autofocus", :spellcheck => "false", :size => 30, :class => "email_pwd txt" %>
+  </p>
+
+  <p>
+    <%= label_tag :password %>
+    <%= password_field_tag :password, params[:password], :autocapitalize => "off", :autocorrect => "off", :spellcheck => "false", :size => 30, :class => "email_pwd txt" %>
+  </p>
+
+  <p>
+    <%= label_tag :audience_uri %>
+    <%= text_field_tag :audience_uri, params[:audience_uri] %>
+  </p>
+
+  <p>
+    <%= label_tag :saml_acs_url, "Consumer URL (probably the same as audience)" %>
+    <%= text_field_tag :saml_acs_url, params[:saml_acs_url] %>
+  </p>
+
+  <a href="#" onclick="var advanced = document.getElementById('advanced-functionality'); advanced.style.display == 'block' ? advanced.style.display = 'none' : advanced.style.display = 'block';">Advanced</a>
+  <div id="advanced-functionality" style="display: none;">
+    <p>
+      <%= label_tag :user_id, "User ID (will come back as entity_id, leave blank for a default hash of the email):" %>
+      <%= text_field_tag :user_id, params[:user_id] || "", :class => "email_pwd txt" %>
+    </p>
+  </div>
+
+  <p>
+    <%= submit_tag "Sign in", :class => "button big blueish" %>
+  </p>
+<% end %>

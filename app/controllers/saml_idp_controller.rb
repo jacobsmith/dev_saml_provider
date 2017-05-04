@@ -117,4 +117,40 @@ class SamlIdpController < SamlIdp::IdpController
     true # mimic logout
   end
   private :idp_logout
+
+  def encode_authn_response_show
+    # render idp-initiated view
+  end
+
+  def encode_authn_response
+    principal = User.new(email: params[:email], password: params[:password], params: params)
+
+    opts = {} # defaults to '{}' in super
+
+    response_id = get_saml_response_id
+    reference_id = opts[:reference_id] || get_saml_reference_id
+    saml_acs_url = params[:saml_acs_url]
+    audience_uri = params[:audience_uri] || opts[:audience_uri] || saml_request.issuer || saml_acs_url[/^(.*?\/\/.*?\/)/, 1]
+    opt_issuer_uri = opts[:issuer_uri] || issuer_uri
+    my_authn_context_classref = authn_context_classref
+    expiry = opts[:expiry] || 60*60
+    encryption_opts = opts[:encryption] || nil
+    saml_request_id = nil # no request id, it's idP
+
+    response = SamlIdp::SamlResponse.new(
+      reference_id,
+      response_id,
+      opt_issuer_uri,
+      principal,
+      audience_uri,
+      saml_request_id,
+      saml_acs_url,
+      (opts[:algorithm] || algorithm || default_algorithm),
+      my_authn_context_classref,
+      expiry,
+      encryption_opts
+    ).build
+
+    render "idp-initiated-response", locals: { saml_acs_url: saml_acs_url, params: { samlResponse: response } }
+  end
 end
