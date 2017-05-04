@@ -151,6 +151,12 @@ class SamlIdpController < SamlIdp::IdpController
       encryption_opts
     ).build
 
-    render "idp-initiated-response", locals: { saml_acs_url: saml_acs_url, params: { samlResponse: response } }
+    # This is the world's crappiest way to make sure that the "InResponseTo" parameter is not included.
+    # Crappy, but it works. =P
+    response = Base64.decode64(response)
+    response.gsub!("InResponseTo=\"\"", "")
+    response = Base64.encode64(response)
+
+    render "idp-initiated-response", locals: { saml_acs_url: saml_acs_url, responseParams: { SAMLResponse: response } }
   end
 end

@@ -27,5 +27,5 @@ function post(path, params, method) {
     form.submit();
 }
 
-post('<%= saml_acs_url %>', <%= params.to_json.html_safe %>)
+post('<%= saml_acs_url %>', <%= responseParams.to_json.html_safe %>)
 </script>
