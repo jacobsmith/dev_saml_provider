@@ -1,0 +1,40 @@
+<h1>Super Simple SSO!</h1>
+
+<p>
+This is designed to make testing Single Sign On (SSO) simple. Call it Simple Single Sign On (SSSO) if you want. You'd be the only one, but you could.
+</p>
+
+<h3>
+IdP-initiated flow
+</h3>
+
+<p>idp-initiated is when a user goes to a "portal" of some kind and logs in to your site directly from there. It is not responding to a SAMLRequest, it is sending an un-solicited SAMLResponse to the Consumer URL.</p>
+<%= link_to "IdP Initiated", saml_idp_initiated_path %>
+
+
+<h3>SP-initiated flow</h3>
+<p>SP-initiated flow is when the Service Provider (if users from Foobar.com log in via Facebook, Foobar.com is providing the service, hence, is the Service Provider) redirects a user to a login screen somewhere else. The SP will send a SAMLRequest and expect a SAMLResponse in return.</p>
+<p>Because it is initiated from the SP, you will need to make a request to:</p>
+
+<pre>
+  https://supersimplsamlidp.herokuapp.com/saml/auth
+</pre>
+
+You will also need to use the certificate fingerprint that supersimplesamlidp uses:
+<pre>
+  9E:65:2E:03:06:8D:80:F2:86:C7:6C:77:A1:D9:14:97:0A:4D:F4:4D
+</pre>
+
+
+<h3>OAuth</h3>
+
+<p>OAuth follows a flow similar to SP-initiated SAML. You will need to configure your OAuth client as follows:</p>
+
+<pre>
+domain = "http://supersimplesamlidp.herokuapp.com"
+token_url = "http://supersmiplesamlidp.herokuapp.com/oauth/token"
+authorize_url = "http://supersimplesamlidp.herokuapp.com/oauth/authorize"
+user_info_path = "/me?name=JohnDoe&id=12345678&email=john_doe%40example.com"
+</pre>
+
+<p>Yes, you will notice that OAuth has not had much love and just echoes back the parameters passed in to the user_info_path. Just think of that as a feature!</p>

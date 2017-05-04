@@ -15,12 +15,12 @@
   </p>
 
   <p>
-    <%= label_tag :audience_uri %>
+    <%= label_tag :audience_uri, "Audience URI (Probably yourhost.com/auth/saml/metadata)" %>
     <%= text_field_tag :audience_uri, params[:audience_uri] %>
   </p>
 
   <p>
-    <%= label_tag :saml_acs_url, "Consumer URL (probably the same as audience)" %>
+    <%= label_tag :saml_acs_url, "Consumer URL (probably yourhost.com/auth/saml/callback)" %>
     <%= text_field_tag :saml_acs_url, params[:saml_acs_url] %>
   </p>
 

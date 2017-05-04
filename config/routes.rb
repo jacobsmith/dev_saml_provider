@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  root to: 'static#index'
 
   get '/saml/auth' => 'saml_idp#new'
   get '/saml/metadata' => 'saml_idp#show'
