@@ -6,6 +6,9 @@ Rails.application.routes.draw do
   post '/saml/idp-initiated' => 'saml_idp#encode_authn_response'
   get '/saml/idp-initiated' => 'saml_idp#encode_authn_response_show'
   match '/saml/logout' => 'saml_idp#logout', via: [:get, :post, :delete]
+  get '/me' => 'oauth_users#me'
+
+  use_doorkeeper
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
