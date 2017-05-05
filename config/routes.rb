@@ -4,8 +4,8 @@ Rails.application.routes.draw do
   get '/saml/auth' => 'saml_idp#new'
   get '/saml/metadata' => 'saml_idp#show'
   post '/saml/auth' => 'saml_idp#create'
-  post '/saml/idp-initiated' => 'saml_idp#encode_authn_response'
-  get '/saml/idp-initiated' => 'saml_idp#encode_authn_response_show'
+  post '/saml/idp-initiated' => 'saml_idp_initiated#encode_authn_response'
+  get '/saml/idp-initiated' => 'saml_idp_initiated#encode_authn_response_show'
   match '/saml/logout' => 'saml_idp#logout', via: [:get, :post, :delete]
   get '/me' => 'oauth_users#me'
 
