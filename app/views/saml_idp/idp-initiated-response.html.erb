@@ -23,6 +23,8 @@ function post(path, params, method) {
          }
     }
 
+    console.log(atob(params['SAMLResponse']))
+
     document.body.appendChild(form);
     form.submit();
 }
